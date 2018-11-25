@@ -8,8 +8,6 @@
 
 https://wikidocs.net/4307
 
-https://wikidocs.net/4307
-
 ------
 
 # 파이썬 소개와 개발환경 설치
