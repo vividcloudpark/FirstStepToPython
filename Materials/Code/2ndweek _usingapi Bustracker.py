@@ -14,12 +14,11 @@ def Bustracker():
     request_service_name = 'CardBusStatisticsServiceNew'
     funder_url = base+credit+'/json/'+request_service_name
     fromnum = 1
-    endnum = 100
+    endnum = 1000
     index = f'/{fromnum}/{endnum}/'
     date = '20181114/'
     bus_num = input("몇번버스를 탈까요?") + '/'
     requrl = funder_url+index+date+bus_num
-    print(requrl)
 
     req = urllib.request.Request(requrl)
     response = urllib.request.urlopen(req)
@@ -29,22 +28,26 @@ def Bustracker():
 
     numoflist = albumdata['CardBusStatisticsServiceNew']['list_total_count']
     print(str(numoflist)  + "개 발견!")
-    if numoflist < 100:
-        loopnum = numoflist
-    else:
-        loopnum = 100
 
+    mostpeople = 0
+    mostpeople_station = 0
+    leastpeople = int(albumdata['CardBusStatisticsServiceNew']['row'][0]['RIDE_PASGR_NUM'])
+    leastpeople_station = albumdata['CardBusStatisticsServiceNew']['row'][0]['BUS_STA_NM']
 
-    for i in range(loopnum):
-        a = 0
-        b = 0
+    for i in range(numoflist):
         stationname = albumdata['CardBusStatisticsServiceNew']['row'][i]['BUS_STA_NM']
         people = int(albumdata['CardBusStatisticsServiceNew']['row'][i]['RIDE_PASGR_NUM'])
-        if people > a:
-            a = people
-            b = stationname
+
+        if people > mostpeople:
+            mostpeople = people
+            mostpeople_station = stationname
+        elif people < leastpeople:
+            leastpeople = people
+            leastpeople_station = stationname
+
         print(f'{stationname}에서는 {people}명이 탔네요!')
-    print(f'오늘 {bus_num.replace("/","")}버스에서 제일 많이 탄 정거장은 {b}에서 {a}명 탄게 최대입니다!')
+    print(f'{date.replace("/","")}에 {bus_num.replace("/","")}버스에서 제일 많이 탄 정거장은 {mostpeople_station}에서 {mostpeople}명 탄게 최대입니다!')
+    print(f'{date.replace("/","")}에 {bus_num.replace("/","")}버스에서 제일 적게 탄 정거장은 {leastpeople_station}에서 {leastpeople}명 탄게 최대입니다!')
 
 if __name__ == '__main__':
     Bustracker()
