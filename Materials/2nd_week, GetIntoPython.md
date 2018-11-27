@@ -309,3 +309,6 @@ json = {
 2)json['history'][1]['item']
 
 3)list(json.keys())[0:2]
+
+# API 불러오기
+
