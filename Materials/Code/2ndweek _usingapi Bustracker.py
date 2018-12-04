@@ -15,8 +15,8 @@ def compose_adddress(credit, bus_num, date):
     index = f'/{fromnum}/{endnum}/'
     date = date + '/'
     bus_num = bus_num + '/'
-    return requrl = funder_url+index+date+bus_num
-
+    requrl = funder_url+index+date+bus_num
+    return requrl
     
 def request_and_jsonlize(requrl):    
     req = urllib.request.Request(requrl)
