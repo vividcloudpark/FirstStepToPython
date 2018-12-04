@@ -6,29 +6,29 @@ import time
 import urllib.request
 import pprint
 
-
-
-def Bustracker():
-    base = 'http://openapi.seoul.go.kr:8088/'
-    credit = input("인증키를 넣어주세요")
+def compose_adddress(credit, bus_num, date):
+    base = 'http://openapi.seoul.go.kr:8088/'    
     request_service_name = 'CardBusStatisticsServiceNew'
     funder_url = base+credit+'/json/'+request_service_name
     fromnum = 1
     endnum = 1000
     index = f'/{fromnum}/{endnum}/'
-    date = '20181114/'
-    bus_num = input("몇번버스를 탈까요?") + '/'
-    requrl = funder_url+index+date+bus_num
+    date = date + '/'
+    bus_num = bus_num + '/'
+    return requrl = funder_url+index+date+bus_num
 
+    
+def request_and_jsonlize(requrl):    
     req = urllib.request.Request(requrl)
     response = urllib.request.urlopen(req)
     data = response.read().decode(response.headers.get_content_charset())
-    albumdata = json.loads(data)
-    pprint.pprint(albumdata)
-
-    numoflist = albumdata['CardBusStatisticsServiceNew']['list_total_count']
+    busdata = json.loads(data)
+    pprint.pprint(busdata)
+    numoflist = busdata['CardBusStatisticsServiceNew']['list_total_count']
     print(str(numoflist)  + "개 발견!")
-
+    return busdata
+    
+def bus_by_bus(busdata):
     mostpeople = 0
     mostpeople_station = 0
     leastpeople = int(albumdata['CardBusStatisticsServiceNew']['row'][0]['RIDE_PASGR_NUM'])
@@ -49,5 +49,22 @@ def Bustracker():
     print(f'{date.replace("/","")}에 {bus_num.replace("/","")}버스에서 제일 많이 탄 정거장은 {mostpeople_station}에서 {mostpeople}명 탄게 최대입니다!')
     print(f'{date.replace("/","")}에 {bus_num.replace("/","")}버스에서 제일 적게 탄 정거장은 {leastpeople_station}에서 {leastpeople}명 탄게 최대입니다!')
 
+def bustracker(credit):
+    while stop_button != "0":
+        bus_num = input("몇번버스를 탈까요?")
+        date = input("몇일버스를 탈까요?" 20181204 식으로 적어주세요")
+        compose_adddress(credit, bus_num, date)
+        requrl = compose_adddress(credit, bus_num, date)
+        busdata = request_and_jsonlize(requrl)
+        bus_by_bus(busdata)
+        stop_button = input("그만하고싶으면 0을 입력해주세요)
+    else:
+        print("내리실문은 오른쪽, 오른쪽입니다")
+                            
+                            
+
+
 if __name__ == '__main__':
-    Bustracker()
+    credit = input("인증키를 넣어주세요")
+    
+    bustracker(credit)
